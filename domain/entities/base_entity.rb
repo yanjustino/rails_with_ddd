@@ -1,5 +1,5 @@
 class BaseEntity
-  def initialize(args)
+  def initialize (args)
     self.attributes = args
   end
 
