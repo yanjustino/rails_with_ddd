@@ -1,0 +1,2 @@
+class TerrainRepository < BaseRepository
+end
