@@ -1,6 +1,6 @@
 class TerrainController < ApplicationController
   def initialize
-    @service = Resolver.resolver TerrainServices
+    @service = Resolver.resolve TerrainServices
   end
 
   def index

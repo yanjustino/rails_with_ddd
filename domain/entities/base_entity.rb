@@ -1,4 +1,8 @@
 class BaseEntity
+  def initialize(args)
+    self.attributes = args
+  end
+
   def attributes= (attributes = {})
     attributes.each do |k, v|
       self.send "#{k}=", v

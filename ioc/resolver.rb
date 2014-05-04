@@ -1,5 +1,5 @@
 class Resolver < Modules
-  def self.resolver (dependecy)
+  def self.resolve (dependecy)
     modules dependecy
   end
 end

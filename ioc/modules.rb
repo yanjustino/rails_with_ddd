@@ -3,8 +3,9 @@ class Modules
 
   def self.modules (dependecy)
     case dependecy.name
-    when 'TerrainServices' then TerrainServices.new modules(TerrainRepository)
-    when 'TerrainRepository' then TerrainRepository.new(Terrain)
+    when 'Terrain' then Terrain.new
+    when 'TerrainRepository' then TerrainRepository.new Terrain
+    when 'TerrainServices' then TerrainServices.new modules TerrainRepository
     else nil end
   end
 end

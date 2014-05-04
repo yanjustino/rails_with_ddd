@@ -2,7 +2,7 @@ class BaseRepository
   attr_accessor :context
 
   def initialize (model)
-    @context = model.new
+    @context = Resolver.resolve model
   end
 
   def create (entity)

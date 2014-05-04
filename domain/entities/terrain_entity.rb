@@ -6,10 +6,6 @@ class TerrainEntity < BaseEntity
                 :private_documentation, :other_documentation, :terms_documentation,
                 :observation
 
-  def initialize(args)
-    self.attributes = args
-  end
-
   def size
     @width * @height
   end
