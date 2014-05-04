@@ -26,7 +26,11 @@ Two folders were created (Domain and IOC). Domain Folder contains entities, serv
   
  * ioc = Inversion of Control and DI
 
-###using 
+Using DDD wit rails 
+====================
+examples using DDD wit rails
+
+##controller
 
 ```ruby
 #controller
@@ -43,7 +47,10 @@ class TerrainController < ApplicationController
     render json: terrain.to_json
   end
 end
+```
+##services
 
+```ruby
 #services on Domain/Services
 class TerrainServices < BaseServices
   def create (terrain)
@@ -53,8 +60,89 @@ class TerrainServices < BaseServices
     @repository.create(terrain)
   end
 end
-
-
 ```
- 
 
+##entities
+
+```ruby
+#entity in domain/entities.
+class TerrainEntity < BaseEntity
+  attr_accessor :width, :height,
+                :street, :number, :district, :city, :state, :zip_code,
+                :state, :value, :quota, :number_quote,
+                :type, :condominium_tax, :condominium, :iptu, :public_documentation,
+                :private_documentation, :other_documentation, :terms_documentation,
+                :observation
+
+  def size
+    @width * @height
+  end
+end
+```
+
+##repository
+
+```ruby
+#entity in domain/repositories.
+class TerrainRepository < BaseRepository
+end
+
+class BaseRepository
+  attr_accessor :context
+
+  def initialize (model)
+    @context = Resolver.resolve model
+  end
+
+  def create (entity)
+    load entity
+    @context.save && @context if @context.valid?
+  end
+
+  protected
+
+  def load (entity)
+    @context.attributes = entity.to_hash
+  end
+end
+```
+
+
+Using IoC
+==========
+
+```ruby
+#resolver in ioc/
+class Resolver < Modules
+  def self.resolve (dependecy)
+    modules dependecy
+  end
+end
+
+class Modules
+  protected
+
+  def self.modules (dependecy)
+    case dependecy.name
+    when 'Terrain' then Terrain.new
+    when 'TerrainRepository' then TerrainRepository.new Terrain
+    when 'TerrainServices' then TerrainServices.new modules TerrainRepository
+    else nil end
+  end
+end
+```
+
+
+Setting DDD
+=============
+In config/application.rb
+
+```ruby
+  ...
+  class Application < Rails::Application
+    config.autoload_paths += %W(#{config.root}/domain/entities)
+    config.autoload_paths += %W(#{config.root}/domain/services)
+    config.autoload_paths += %W(#{config.root}/domain/repositories)
+    config.autoload_paths += %W(#{config.root}/ioc)
+  end
+```
